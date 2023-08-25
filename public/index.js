@@ -10,7 +10,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-const port = 5000;
+const port = 80;
 
 app.use(express.static('public'));
 // Serve the HTML page with the form
@@ -125,8 +125,8 @@ app.post('/send-email', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+ // console.log(`Server is running on http://localhost:${port}`);
   //  console.log(`Server is running on http://35.176.170.40:${port} `);
-  // console.log(`Server is running on http://146.190.45.71:${port}`);
+   console.log(`Server is running on http://:${port}`);
 
 });
