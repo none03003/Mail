@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email sender</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="card text-center">
+    <div class="card-header">
+      WELCOME
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Send mail to multiple Recipients at one click</h5>
+      <p class="card-text">More features are on the way.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Ip Status</h5>
+          <p class="card-text">Mailer</p>
+          <p class="card-text">Data Status</p>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Input IP</span>
+            </div>
+            <textarea class="form-control" aria-label="With textarea"></textarea>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body" id="smtpDetailsForm">
+                  <h5 class="card-title">SMTP Details</h5>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="smtpHostLabel">SMTP Host</span>
+                    </div>
+                    <input type="text" id="smtpHost" class="form-control" placeholder="SMTP Host" aria-label="SMTP Host"
+                      aria-describedby="smtpHostLabel">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="smtpPortLabel">SMTP Port</span>
+                    </div>
+                    <input type="text" id="smtpPort" class="form-control" placeholder="SMTP Port" aria-label="SMTP Port"
+                      aria-describedby="smtpPortLabel">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="smtpUserLabel">SMTP User</span>
+                    </div>
+                    <input type="text" id="smtpUser" class="form-control" placeholder="SMTP User" aria-label="SMTP User"
+                      aria-describedby="smtpUserLabel">
+                  </div>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="smtpPassLabel">SMTP Password</span>
+                    </div>
+                    <input type="password" id="smtpPass" class="form-control" placeholder="SMTP Password"
+                      aria-label="SMTP Password" aria-describedby="smtpPassLabel">
+                  </div>
+                  <button type="button" class="btn btn-primary" id="submitSmtpDetailsBtn">Submit SMTP Details</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" id="loggedInSection" style="display: none;">
+            <div class="col-sm-12">
+              <div class="card">
+                <div class="card-body bg-success text-white">
+                  <h5 class="card-title">Logged in as User</h5>
+                  <p class="card-text">You are now logged in and ready to send emails.</p>
+                  <button type="button" class="btn btn-danger" id="logoutBtn">Log Out</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="smtpError" class="alert alert-danger mt-3" style="display: none;"></div>
+          <div id="successMessage" class="alert alert-success mt-3" style="display: none;"></div>
+
+          <div class="text-center mt-4">
+            <a href="email-input.html" class="btn btn-primary btn-sm">Get email file</a>
+          </div>
+          <div class="card text-center" id="monitoringBox" style="display: block;
+          margin-top: 20px;">
+            <div class="card-body">
+              <h5 class="card-title">Email Monitoring</h5>
+              <p class="card-text">
+                <span id="remainingEmails">Remaining Emails: 0</span>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Input required information</h5>
+          <div>
+            <input type="radio" id="testRadio" name="radioType" value="test" checked required><label
+              for="testRadio">Test</label>
+            <input type="radio" id="bulkRadio" name="radioType" value="bulk" required><label
+              for="bulkRadio">Bulk</label>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Domain</span>
+            </div>
+            <input type="text" id="domainInput" class="form-control" placeholder="Domain" aria-label="domain"
+              aria-describedby="basic-addon1">
+          </div>
+
+          <div class="input-line recipient-line">
+            <div class="input-group mb-3">
+              <input type="text" id="recipientEmails" class="form-control" placeholder="Recipient's username"
+                aria-label="Recipient's username" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2">@example.com</span>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <input type="file" id="emailFileInput" class="form-control">
+              <div class="input-group-append">
+                <button id="loadEmailsBtn" class="btn btn-primary">Load Emails</button>
+              </div>
+            </div>
+          </div>
+
+
+
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Subject</span>
+            </div>
+            <input type="text" id="subject" class="form-control" placeholder="Subject" aria-label="Subject"
+              aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">From</span>
+            </div>
+            <input type="text" id="from" class="form-control" placeholder="From" aria-label="From"
+              aria-describedby="basic-addon1">
+          </div>
+          <div class="input-line test-email-line" style="display: none;">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Test Email</span>
+
+              </div>
+              <textarea class="form-control" name="emailAddresses" id="test_email" placeholder="Test Email"
+                aria-describedby="basic-addon1" cols="30" rows="10"></textarea>
+
+            </div>
+          </div>
+
+
+          <h4>Type</h4>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="plain" name="content-type" class="custom-control-input" value="plain" required>
+            <label class="custom-control-label" for="plain">plain</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="html" name="content-type" class="custom-control-input" value="html">
+            <label class="custom-control-label" for="html">Html</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="mime" name="content-type" class="custom-control-input" value="mime">
+            <label class="custom-control-label" for="mime">mime</label>
+          </div>
+
+          <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="previewModalLabel">Email Body Preview</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <pre id="previewContent"></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="button" id="previewBtn" class="btn btn-primary" data-toggle="modal" data-target="#previewModal">
+            Preview mail
+          </button>
+          <br>
+          <h4>Encoding type</h4>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="base64" name="content-encoding" class="custom-control-input" value="base64"
+              required>
+            <label class="custom-control-label" for="base64">Base64</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="quoted-printable" name="content-encoding" class="custom-control-input"
+              value="quoted-printable">
+            <label class="custom-control-label" for="quoted-printable">Quoted-Printable</label>
+          </div>
+
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Body</span>
+            </div>
+            <textarea id="emailBody" class="form-control" placeholder="Body" aria-label="Body"
+              aria-describedby="basic-addon1"></textarea>
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Header</span>
+            </div>
+            <textarea type="text" id="header" class="form-control" placeholder="Header" aria-label="Body"
+              aria-describedby="basic-addon1"></textarea>
+          </div>
+
+          <h4>Send Option:</h4>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="auto" name="send-option" class="custom-control-input" value="auto">
+            <label class="custom-control-label" for="auto">Auto</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="manual" name="send-option" class="custom-control-input" value="manual">
+            <label class="custom-control-label" for="manual">Manual</label>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Limit">Limit</span>
+            </div>
+            <input type="number" id="totalLimit" class="form-control" placeholder="Enter Limit" aria-label="Enter Limit"
+              aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Limit-to-send">Limit-to-send</span>
+            </div>
+            <input type="number" id="limitToSend" class="form-control" placeholder="Limit to send"
+              aria-label="Limit to send" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="offer_id">Offer id</span>
+            </div>
+            <input type="text" class="form-control" placeholder="Offer Id" aria-label="Offer_Id"
+              aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="message_id">Message id</span>
+            </div>
+            <input type="text" class="form-control" placeholder="Message Id" aria-label="message_Id"
+              aria-describedby="basic-addon1">
+          </div>
+
+
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="smtp" name="send-method" class="custom-control-input" value="smtp">
+            <label class="custom-control-label" for="smtp">SMTP</label>
+          </div>
+
+          <button type="button" class="btn btn-primary btn-sm">Create Link</button>
+          <button type="button" class="btn btn-secondary btn-sm">Open</button>
+          <button type="button" onclick="sendEmail()" class="btn btn-secondary btn-sm">Send Mail</button>
+
+          <div id="response"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+
+    function sendEmail() {
+      // const userEmail = document.getElementById('userEmail').value;
+      const fromAddress = document.getElementById('from').value;
+      const domain = document.getElementById('domainInput').value;
+      const contentEncoding = document.querySelector('input[name="content-encoding"]:checked').value;
+      const subject = document.getElementById('subject').value;
+      const body = document.getElementById('emailBody').value;
+      const contentType = document.querySelector('input[name="content-type"]:checked').value;
+
+      const testRadio = document.getElementById('testRadio');
+      const testEmailInput = document.getElementById('test_email');
+      const recipientEmailsInput = document.getElementById('recipientEmails');
+
+
+      let recipientEmails;
+
+      if (testRadio.checked) {
+        // Limit recipientEmails to 5 recipients for the "Test" mode
+        const testEmail = testEmailInput.value.split('\n').map(email => email.trim()).filter(email => email !== '');
+        recipientEmails = testEmail.join(', ');
+      } else {
+        recipientEmails = document.getElementById('recipientEmails').value;
+      }
+
+      let emailBody;
+
+      if (contentType === 'html') {
+        emailBody = body;
+      } else if (contentType === 'plain') {
+        emailBody = body.replace(/(<([^>]+)>)/gi, '');
+      } else if (contentType === 'mime') {
+        emailBody = body; // You can format the MIME content as needed
+      }
+
+      const sendMethod = document.querySelector('input[name="send-method"]:checked').value;
+
+      fetch('/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ recipientEmails, subject, body: emailBody, sendMethod, domain, fromAddress, contentEncoding, }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const responseDiv = document.getElementById('response');
+          responseDiv.textContent = data.message;
+          if (data.success) {
+            responseDiv.style.color = 'green';
+
+            if (!testRadio.checked) {
+              const recipientEmailsInput = document.getElementById('recipientEmails');
+              const recipientEmails = recipientEmailsInput.value;
+              const sentEmails = recipientEmails.split(',').map(email => email.trim());
+              const remainingEmails = sentEmails.slice(1).join(', ');
+
+              recipientEmailsInput.value = "";
+
+              const remainingEmailsSpan = document.getElementById('remainingEmails');
+              const remainingEmailsCount = sentEmails.length - 1;
+              remainingEmailsSpan.textContent = `Remaining Emails: ${remainingEmailsCount}`;
+
+            }
+
+          } else {
+            responseDiv.style.color = 'red';
+          }
+        })
+        .catch((error) => console.error('Error sending email:', error));
+    }
+
+
+    document.getElementById('loadEmailsBtn').addEventListener('click', function () {
+      const emailFileInput = document.getElementById('emailFileInput');
+      const file = emailFileInput.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+          const emailAddresses = event.target.result;
+          const emailArray = emailAddresses.trim().split('\n');
+          const loadedEmails = emailArray.length;
+          document.getElementById('recipientEmails').value = emailArray.join(', ');
+
+          // sendEmailsSequentially(emailArray);
+          // document.getElementById('recipientEmails').value = emailAddresses;
+          // document.getElementById('messageBox').innerHTML = '<p class="text-success">Emails loaded successfully.</p>';
+          const emailsLoadedSpan = document.getElementById('remainingEmails');
+          emailsLoadedSpan.textContent = `Remaining Emails: ${loadedEmails}`;
+        };
+
+        reader.readAsText(file);
+      } else {
+        document.getElementById('messageBox').innerHTML = '<p class="text-danger">Please select a file to load.</p>';
+      }
+    });
+
+
+
+    function updatePreviewModal() {
+      const body = document.getElementById('emailBody').value;
+      const contentType = document.querySelector('input[name="content-type"]:checked').value;
+
+      let previewContent = '';
+
+      if (contentType === 'html') {
+        previewContent = body;
+      } else if (contentType === 'plain') {
+        previewContent = body.replace(/(<([^>]+)>)/gi, '');
+      } else if (contentType === 'mime') {
+        previewContent = body;
+      }
+      const previewElement = document.getElementById('previewContent');
+      previewElement.innerHTML = previewContent;
+    }
+    document.getElementById('previewBtn').addEventListener('click', updatePreviewModal);
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+      const submitSmtpDetailsBtn = document.getElementById('submitSmtpDetailsBtn');
+      const loggedInSection = document.getElementById('loggedInSection');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const smtpErrorDiv = document.getElementById('smtpError');
+      const successMessageDiv = document.getElementById('successMessage');
+
+      submitSmtpDetailsBtn.addEventListener('click', function () {
+        // Retrieve SMTP details from input fields
+        const smtpHost = document.getElementById('smtpHost').value;
+        const smtpPort = document.getElementById('smtpPort').value;
+        const smtpUser = document.getElementById('smtpUser').value;
+        const smtpPass = document.getElementById('smtpPass').value;
+
+        fetch('/setup-smtp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ smtpHost, smtpPort, smtpUser, smtpPass }),
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              smtpErrorDiv.textContent = ''; // Clear error message text
+              smtpErrorDiv.style.display = 'none';
+              successMessageDiv.textContent = 'SMTP setup successful.';
+              successMessageDiv.style.display = 'block';
+
+              document.getElementById('smtpDetailsForm').style.display = 'none';
+              loggedInSection.style.display = 'block';
+            } else {
+              smtpErrorDiv.textContent = data.message; // Update error message text
+              smtpErrorDiv.style.display = 'block'; // Show the error message div
+              successMessageDiv.style.display = 'none';
+              console.error('Failed to submit SMTP details:', data.message
+              );
+            }
+          })
+          .catch(error => {
+            console.error('Error submitting SMTP details:', error);
+            // Display the SMTP error message in the designated <div>
+            const smtpErrorDiv = document.getElementById('smtpError');
+            smtpErrorDiv.textContent = 'Error submitting SMTP details. Please try again later.';
+            smtpErrorDiv.style.display = 'block';
+            successMessageDiv.style.display = 'none';
+          });
+      });
+      logoutBtn.addEventListener('click', function () {
+        // Show SMTP details form and hide logged in section
+        document.getElementById('smtpDetailsForm').style.display = 'block';
+        loggedInSection.style.display = 'none';
+
+        // Clear SMTP input fields
+        document.getElementById('smtpHost').value = '';
+        document.getElementById('smtpPort').value = '';
+        document.getElementById('smtpUser').value = '';
+        document.getElementById('smtpPass').value = '';
+        successMessageDiv.style.display = 'none';
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const testRadio = document.getElementById('testRadio');
+      const bulkRadio = document.getElementById('bulkRadio');
+      const testEmailInput = document.getElementById('test_email');
+      const recipientEmailsInput = document.getElementById('recipientEmails');
+      const loadEmailsBtn = document.getElementById('loadEmailsBtn');
+      const recipientLine = document.querySelector('.recipient-line');
+      const testEmailLine = document.querySelector('.test-email-line');
+
+      function toggleInputs() {
+        if (testRadio.checked) {
+          // Hide recipient input line and load emails button, show test email input line
+          recipientLine.style.display = 'none';
+          testEmailLine.style.display = 'block';
+        } else {
+          // Show recipient input line and load emails button, hide test email input line
+          recipientLine.style.display = 'block';
+          testEmailLine.style.display = 'none';
+        }
+        if (bulkRadio.checked) {
+          // Hide test email input
+          testEmailInput.style.display = 'none';
+        } else {
+          // Show test email input
+          testEmailInput.style.display = 'block';
+        }
+      }
+
+      // Initial call to set the correct state based on the default checked radio
+      toggleInputs();
+
+      // Add event listeners to radio buttons to update inputs
+      testRadio.addEventListener('change', toggleInputs);
+      bulkRadio.addEventListener('change', toggleInputs);
+
+    });
+
+  </script>
+  <script src="index.js"></script>
+</body>
+
+</html>
